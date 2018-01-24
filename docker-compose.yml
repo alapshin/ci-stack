@@ -1,0 +1,49 @@
+version: "3.1"
+
+services:
+  traefik:
+    image: traefik:1.5
+    restart: always
+    hostname: traefik
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./acme.json:/acme.json
+      - ./traefik.toml:/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  jenkins:
+    image: alapshin/jenkins-master
+    restart: always
+    hostname: jenkins
+    container_name: jenkins
+    expose:
+      - "8080"
+    secrets:
+      - source: jenkins_credentials
+        target: credentials.yml
+      - source: jenkins_admin_credentials
+        target: admin_credentials.properties
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.port=8080"
+      - "traefik.backend=jenkins"
+      - "traefik.frontend.rule=Host:localhost"
+    environment:
+      DOCKER_GROUP: docker
+      DOCKER_SOCKET: /var/run/docker.sock
+      JENKINS_USER: jenkins
+
+volumes:
+  jenkins_home:
+
+secrets:
+  jenkins_credentials:
+    file: ./secrets/credentials.yml
+  jenkins_admin_credentials:
+    file: ./secrets/admin_credentials.properties
+
