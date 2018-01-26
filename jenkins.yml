@@ -1,0 +1,66 @@
+theme:
+  css: "https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css"
+
+github:
+  # hookUrl: http://example.com/github-webhook/
+  # hookSharedSecretId: пшерги_shared_secret
+  servers:
+    - name: Public GitHub server
+      apiUrl: https://api.github.com
+      manageHooks: true,
+      credentialsId: github_access_token
+
+libraries:
+  - name: "util-lib"
+    implicit: false
+    defaultVersion: 'master'
+    includeInChangesets: true
+    allowVersionOverride: true
+    retriever:
+        scm:
+          git:
+            remote: "https://github.com/alapshin/jenkins-pipeline-shared-lib.git"
+
+jenkins:
+  clouds:
+    - docker:
+        name: "docker"
+        host:
+          uri: "unix:///var/run/docker.sock"
+        credentials_id: ""
+        container_cap: 10
+        read_timeout: 15
+        connection_timeout: 5
+        templates:
+          - labels: "android-agent"
+            image: "alapshin/jenkins-android-agent:latest"
+            executors: 1
+            instance_cap: ""
+            remote_fs: "/home/jenkins"
+            # valid values: exclusive or normal
+            usage: "exclusive"
+            # valid values: pull_latest, pull_always, pull_never
+            remove_volumes: false,
+            image_pull_strategy: "pull_latest"
+            # Docker settings
+            dns: ""
+            hostname: ""
+            docker_command: ""
+            volumes: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins"
+            volumes_from: ""
+            environment: ""
+            # cpu_shares: 0,
+            # memory_limit: -1,
+            # memory_swap_limit: -1,
+            port_bindings: ""
+            bind_all_ports: false
+            priviliged: false
+            allocate_pseudo_tty: false
+            mac_address: ""
+            remote_fs_root_mapping: ""
+            # Availability settings
+            availability_strategy: "run_once"
+            availability_idle_timeout: 5
+            connector: 
+              user: "jenkins"
+
