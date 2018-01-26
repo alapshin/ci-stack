@@ -4,6 +4,8 @@ services:
   traefik:
     ports:
       - "8080:8080"
+    volumes:
+      - "${WORKDIR-.}/traefik.dev.toml:/traefik.toml"
 
   jenkins:
     volumes:

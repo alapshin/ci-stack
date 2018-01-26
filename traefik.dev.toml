@@ -1,0 +1,12 @@
+checkNewVersion = false
+defaultEntryPoints = ["http"]
+
+[retry]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+
