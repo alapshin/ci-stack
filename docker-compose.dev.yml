@@ -7,4 +7,4 @@ services:
 
   jenkins:
     volumes:
-      - ./master/:/var/jenkins_home/init.groovy.d
+      - ./master/init.groovy.d:/var/jenkins_home/init.groovy.d
