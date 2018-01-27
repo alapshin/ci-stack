@@ -38,16 +38,16 @@ jenkins:
             executors: 1
             instance_cap: ""
             remote_fs: "/home/jenkins"
-            # valid values: exclusive or normal
-            usage: "exclusive"
-            # valid values: pull_latest, pull_always, pull_never
+            # valid values: EXCLUSIVE or NORMAL
+            usage: EXCLUSIVE
+            # valid values: PULL_LATEST, PULL_ALWAYS, PULL_NEVER
             remove_volumes: false,
-            image_pull_strategy: "pull_latest"
+            image_pull_strategy: PULL_LATEST
             # Docker settings
             dns: ""
             hostname: ""
             docker_command: ""
-            volumes: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins"
+            volumes: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins\njenkins_agent_workdir:/home/jenkins/agent"
             volumes_from: ""
             environment: ""
             # cpu_shares: 0,
