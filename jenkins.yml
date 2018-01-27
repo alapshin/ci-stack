@@ -22,6 +22,7 @@ libraries:
             remote: "https://github.com/alapshin/jenkins-pipeline-shared-lib.git"
 
 jenkins:
+  mode: EXCLUSIVE
   clouds:
     - docker:
         name: "docker"
