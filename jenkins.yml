@@ -1,6 +1,3 @@
-theme:
-  css: "https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css"
-
 github:
   # hookUrl: http://example.com/github-webhook/
   # hookSharedSecretId: пшерги_shared_secret
@@ -23,6 +20,8 @@ libraries:
 
 jenkins:
   mode: EXCLUSIVE
+  theme:
+    css: "https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css"
   clouds:
     - docker:
         name: "docker"
@@ -64,4 +63,3 @@ jenkins:
             availability_idle_timeout: 5
             connector: 
               user: "jenkins"
-
