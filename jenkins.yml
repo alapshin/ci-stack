@@ -58,8 +58,6 @@ jenkins:
             allocate_pseudo_tty: false
             mac_address: ""
             remote_fs_root_mapping: ""
-            # Availability settings
-            availability_strategy: "run_once"
             availability_idle_timeout: 5
             connector: 
               user: "jenkins"
