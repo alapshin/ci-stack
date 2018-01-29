@@ -35,7 +35,7 @@ jenkins:
           - labels: "android-agent"
             image: "alapshin/jenkins-android-agent:latest"
             executors: 1
-            instance_cap: ""
+            instance_cap: "1"
             remote_fs: "/home/jenkins"
             # valid values: EXCLUSIVE or NORMAL
             usage: EXCLUSIVE
