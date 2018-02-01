@@ -2,11 +2,13 @@ version: "3.1"
 
 services:
   traefik:
+    restart: "no"
     ports:
       - "8080:8080"
     volumes:
       - "${WORKDIR-.}/traefik.dev.toml:/traefik.toml"
 
   jenkins:
+    restart: "no"
     volumes:
       - ./master/init.groovy.d:/var/jenkins_home/init.groovy.d
