@@ -21,6 +21,7 @@ libraries:
 jenkins:
   mode: EXCLUSIVE
   theme:
+    js: "https://cdn.rawgit.com/alapshin/7b7e4440cce849a27728235d6b9fb1a0/raw/jenkins-userscript.js"
     css: "https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css"
   clouds:
     - docker:
