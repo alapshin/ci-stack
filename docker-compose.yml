@@ -6,6 +6,9 @@ services:
     restart: always
     hostname: traefik
     container_name: traefik
+    depends_on: 
+      - jenkins
+      - sonarqube
     ports:
       - "80:80"
       - "443:443"
@@ -14,13 +17,31 @@ services:
       - "${WORKDIR-.}/traefik.toml:/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
+  postgres:
+    image: postgres:10.2
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${SONARQUBE_JDBC_USER:-sonar} 
+      POSTGRES_PASSWORD: ${SONARQUBE_JDBC_PASSWORD:-sonar} 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   jenkins:
     image: alapshin/jenkins-master
     restart: always
-    hostname: jenkins
     container_name: jenkins
+    hostname: jenkins
+    environment:
+      DOCKER_GROUP: docker
+      DOCKER_SOCKET: /var/run/docker.sock
+      JENKINS_HOST:
+      JENKINS_USER: jenkins
     expose:
       - "8080"
+    labels:
+      - "traefik.port=8080"
+      - "traefik.backend=jenkins"
+      - "traefik.frontend.rule=Host:${JENKINS_HOST-localhost}"
     secrets:
       - source: jenkins_credentials
         target: credentials.yml
@@ -30,18 +51,35 @@ services:
       - "jenkins_home:/var/jenkins_home"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${WORKDIR-.}/jenkins.yml:/var/jenkins_home/config.yml"
-    labels:
-      - "traefik.port=8080"
-      - "traefik.backend=jenkins"
-      - "traefik.frontend.rule=Host:${JENKINS_HOST-localhost}"
+
+  sonarqube:
+    image: alapshin/sonarqube
+    container_name: sonarqube
+    depends_on: 
+      - postgres
+    expose:
+      - "9000"
     environment:
-      DOCKER_GROUP: docker
-      DOCKER_SOCKET: /var/run/docker.sock
-      JENKINS_HOST:
-      JENKINS_USER: jenkins
+      SONARQUBE_JDBC_URL: jdbc:postgresql://postgres:5432/sonar
+      SONARQUBE_JDBC_USERNAME: ${SONARQUBE_JDBC_USER:-sonar}
+      SONARQUBE_JDBC_PASSWORD: ${SONARQUBE_JDBC_PASSWORD:-sonar}
+    labels:
+      - "traefik.port=9000"
+      - "traefik.backend=sonarqube"
+      - "traefik.frontend.rule=Host:${SONARQUBE_HOST-localhost}"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled_plugins:/opt/sonarqube/lib/bundled-plugins
 
 volumes:
   jenkins_home:
+  postgres_data:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_bundled_plugins:
 
 secrets:
   jenkins_credentials:
