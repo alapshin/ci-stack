@@ -4,7 +4,7 @@ Docker-based CI service setup using Jenkins, SonarQube and Traefik.
 
 Service provides
 1. [Preconfigured Jenkins instance][jenkins]
-2. [SonarQube][sonarqube] instance
+2. [Preconfigured SonarQube instance][sonarqube]
 3. Reverse proxy for Jenkins and SonarQube with Let's Encrypt support using [Traefik][traefik]
 
 ## Deployment
@@ -49,6 +49,6 @@ eval $(docker-machine env --unset)
 
 [traefik]: https://github.com/containous/traefik
 [jenkins]: https://github.com/alapshin/jenkins-master
-[sonarqube]: https://www.sonarqube.org
+[sonarqube]: https://github.com/alapshin/docker-sonarqube
 [docker-machine]: https://docs.docker.com/machine/
 [docker-compose]: https://docs.docker.com/compose/
