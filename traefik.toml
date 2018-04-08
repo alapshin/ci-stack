@@ -22,4 +22,4 @@ OnHostRule = true
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-
+exposedbydefault = false

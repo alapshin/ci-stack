@@ -39,6 +39,7 @@ services:
     expose:
       - "8080"
     labels:
+      - "traefik.enable=true"
       - "traefik.port=8080"
       - "traefik.backend=jenkins"
       - "traefik.frontend.rule=Host:${JENKINS_HOST-localhost}"
@@ -64,6 +65,7 @@ services:
       SONARQUBE_JDBC_USERNAME: ${SONARQUBE_JDBC_USER:-sonar}
       SONARQUBE_JDBC_PASSWORD: ${SONARQUBE_JDBC_PASSWORD:-sonar}
     labels:
+      - "traefik.enable=true"
       - "traefik.port=9000"
       - "traefik.backend=sonarqube"
       - "traefik.frontend.rule=Host:${SONARQUBE_HOST-localhost}"
