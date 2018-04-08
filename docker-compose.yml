@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   traefik:
-    image: traefik:1.5
+    image: traefik:1.6
     restart: always
     hostname: traefik
     container_name: traefik
@@ -18,7 +18,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   postgres:
-    image: postgres:10.2
+    image: postgres:10.3
     container_name: postgres
     environment:
       POSTGRES_USER: ${SONARQUBE_JDBC_USER:-sonar} 
@@ -27,7 +27,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   jenkins:
-    image: alapshin/jenkins-master
+    image: alapshin/jenkins-master:2.107.1
     restart: always
     container_name: jenkins
     hostname: jenkins
@@ -53,7 +53,7 @@ services:
       - "${WORKDIR-.}/jenkins.yml:/var/jenkins_home/config.yml"
 
   sonarqube:
-    image: alapshin/sonarqube
+    image: alapshin/sonarqube:6.7.2
     container_name: sonarqube
     depends_on: 
       - postgres
