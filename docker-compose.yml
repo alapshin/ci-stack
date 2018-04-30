@@ -69,7 +69,7 @@ services:
       - "${WORKDIR}/jenkins.yml:/var/jenkins_home/jenkins.yml"
 
   sonarqube:
-    image: alapshin/sonarqube:6.7.3
+    image: alapshin/sonarqube:6.7.3-2
     container_name: sonarqube
     depends_on: 
       - postgres
