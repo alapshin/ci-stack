@@ -1,64 +1,119 @@
-github:
-  # hookUrl: http://example.com/github-webhook/
-  # hookSharedSecretId: пшерги_shared_secret
-  servers:
-    - name: Public GitHub server
-      apiUrl: https://api.github.com
-      manageHooks: true,
-      credentialsId: github_access_token
-
-libraries:
-  - name: "util-lib"
-    implicit: false
-    defaultVersion: 'master'
-    includeInChangesets: false
-    allowVersionOverride: true
-    retriever:
-        scm:
-          git:
-            remote: "https://github.com/alapshin/jenkins-pipeline-shared-lib.git"
-
 jenkins:
+  # Disable builds on master
   mode: EXCLUSIVE
-  theme:
-    js: "https://cdn.rawgit.com/alapshin/7b7e4440cce849a27728235d6b9fb1a0/raw/jenkins-userscript.js"
-    css: "https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css"
+  location:
+    url: ${JENKINS_URL}
+  systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin"
+
+  # Configure crumb issuer
+  crumbIssuer: standard
+  # Enable agent -> master access control
+  remotingSecurity:
+    enabled: false
+
+  # Configure Docker cloud
   clouds:
     - docker:
         name: "docker"
-        host:
-          uri: "unix:///var/run/docker.sock"
-        credentials_id: ""
-        container_cap: 10
-        read_timeout: 15
-        connection_timeout: 5
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
         templates:
-          - labels: "android-agent"
-            image: "alapshin/jenkins-android-agent:latest"
-            executors: 1
-            instance_cap: "1"
-            remote_fs: "/home/jenkins"
-            # valid values: EXCLUSIVE or NORMAL
-            usage: EXCLUSIVE
-            # valid values: PULL_LATEST, PULL_ALWAYS, PULL_NEVER
-            remove_volumes: false,
-            image_pull_strategy: PULL_LATEST
-            # Docker settings
-            dns: ""
-            hostname: ""
-            docker_command: ""
-            volumes: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins\njenkins_agent_workdir:/home/jenkins/agent"
-            volumes_from: ""
-            environment: ""
-            # cpu_shares: 0,
-            # memory_limit: -1,
-            # memory_swap_limit: -1,
-            port_bindings: ""
-            bind_all_ports: false
-            priviliged: false
-            allocate_pseudo_tty: false
-            mac_address: ""
-            remote_fs_root_mapping: ""
-            availability_idle_timeout: 5
-            connector: 
-              user: "jenkins"
+          - labelString: "android-agent"
+            mode: EXCLUSIVE
+            connector:
+              attach:
+                user: "jenkins"
+            remoteFs: "/home/jenkins"
+            instanceCapStr: "1"
+            dockerTemplateBase:
+              image: "alapshin/jenkins-android-agent:latest"
+              volumesString: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins\njenkins_agent_workdir:/home/jenkins/agent"
+
+  # Configure agent protocols
+  agentProtocols:
+    - "Ping"
+    - "JNLP4-connect"
+
+  # Configure local users
+  # Disable ability to signup
+  # Create administrator account
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: ${ADMIN_PASSWORD}
+
+  # Configure role-based authorization strategy
+  authorizationStrategy:
+    roleStrategy:
+      roles:
+        global:
+          - name: "admin"
+            description: "Jenkins administrators"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "authenticated"
+            description: "Authenticated users"
+            permissions:
+              - "Job/Read"
+              - "Job/Discover"
+              - "Overall/Read"
+            assignments:
+              - "authenticated"
+
+  # Configure GitHub plugin
+  githubpluginconfig:
+    configs:
+      - name: GitHub
+        apiUrl: https://api.github.com
+        manageHooks: true
+        credentialsId: github_access_token
+
+  # Configure SonarQube plugin
+  sonarglobalconfiguration:
+    installations:
+      - name: SonarQube
+        serverUrl: ${SONARQUBE_URL}
+        serverAuthenticationToken: ${SONARQUBE_TOKEN}
+
+  # Configure simple theme plugin
+  simplethemedecorator:
+    cssUrl: https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css
+
+# Disable CLI over Remoting
+security:
+  remotingCLI:
+    enabled: false
+
+credentials:
+  system:
+    ? name: "slack.com"
+      description: "Slack"
+      specifications:
+        - hostnameSpecification:
+            includes:
+              - "*.slack.com"
+    : - string:
+          scope: SYSTEM
+          id: slack_token
+          secret: ${SLACK_TOKEN}
+    ? name: "github.com"
+      description: "Github"
+      specifications:
+        - hostnameSpecification:
+            includes:
+              - "*.github.com"
+    : - string:
+          scope: SYSTEM
+          id: github_access_token
+          secret: ${GITHUB_TOKEN}
+      - usernamePassword:
+          scope: SYSTEM
+          id: github_username_password
+          username: ${GITHUB_USERNAME}
+          password: ${GITHUB_PASSWORD}
+

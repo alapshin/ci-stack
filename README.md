@@ -21,7 +21,7 @@ docker-machine create \
     ciserver
 ```
 
-2. Copy configs and secrets to remote machine
+2. Copy configuration and secrets to remote machine
 ```
 docker-machine scp jenkins.yml ubuntu@ciserver:/home/ubuntu
 docker-machine scp acme.json ubuntu@ciserver:/home/ubuntu

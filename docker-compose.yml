@@ -27,7 +27,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   jenkins:
-    image: alapshin/jenkins-master:2.107.2-2
+    image: alapshin/jenkins-master:2.107.2-3
     restart: always
     container_name: jenkins
     hostname: jenkins
@@ -36,6 +36,9 @@ services:
       DOCKER_SOCKET: /var/run/docker.sock
       JENKINS_HOST:
       JENKINS_USER: jenkins
+      JENKINS_URL: "https://${JENKINS_HOST}"
+      SONARQUBE_URL: "https://${SONARQUBE_HOST}"
+      CASC_JENKINS_CONFIG: /var/jenkins_home/jenkins.yml
     expose:
       - "8080"
     labels:
@@ -44,14 +47,27 @@ services:
       - "traefik.backend=jenkins"
       - "traefik.frontend.rule=Host:${JENKINS_HOST-localhost}"
     secrets:
-      - source: jenkins_credentials
-        target: credentials.yml
-      - source: jenkins_admin_credentials
-        target: admin_credentials.properties
+      - source: admin_password
+        target: ADMIN_PASSWORD
+
+      - source: slack_token
+        target: SLACK_TOKEN
+
+      - source: github_token
+        target: GITHUB_TOKEN
+
+      - source: github_username
+        target: GITHUB_USERNAME
+
+      - source: github_password
+        target: GITHUB_PASSWORD
+
+      - source: sonarqube_token
+        target: SONARQUBE_TOKEN
     volumes:
       - "jenkins_home:/var/jenkins_home"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "${WORKDIR-.}/jenkins.yml:/var/jenkins_home/config.yml"
+      - "${WORKDIR-.}/jenkins.yml:/var/jenkins_home/jenkins.yml"
 
   sonarqube:
     image: alapshin/sonarqube:6.7.3
@@ -84,8 +100,15 @@ volumes:
   sonarqube_bundled_plugins:
 
 secrets:
-  jenkins_credentials:
-    file: "${WORKDIR-.}/secrets/credentials.yml"
-  jenkins_admin_credentials:
-    file: "${WORKDIR-.}/secrets/admin_credentials.properties"
-
+  admin_password:
+    file: "${WORKDIR-.}/secrets/admin_password"
+  slack_token:
+    file: "${WORKDIR-.}/secrets/slack_token"
+  github_token:
+    file: "${WORKDIR-.}/secrets/github_token"
+  github_username:
+    file: "${WORKDIR-.}/secrets/github_username"
+  github_password:
+    file: "${WORKDIR-.}/secrets/github_password"
+  sonarqube_token:
+    file: "${WORKDIR-.}/secrets/sonarqube_token"
