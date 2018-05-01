@@ -91,28 +91,26 @@ security:
 
 credentials:
   system:
-    ? name: "slack.com"
+    ? name: "Slack"
       description: "Slack"
       specifications:
         - hostnameSpecification:
-            includes:
-              - "*.slack.com"
+            includes: "slack.com, *.slack.com"
     : - string:
-          scope: SYSTEM
+          scope: GLOBAL
           id: slack_token
           secret: ${SLACK_TOKEN}
-    ? name: "github.com"
+    ? name: "GitHub"
       description: "Github"
       specifications:
         - hostnameSpecification:
-            includes:
-              - "*.github.com"
+            includes: "github.com,*.github.com"
     : - string:
-          scope: SYSTEM
+          scope: GLOBAL
           id: github_access_token
           secret: ${GITHUB_TOKEN}
       - usernamePassword:
-          scope: SYSTEM
+          scope: GLOBAL
           id: github_username_password
           username: ${GITHUB_USERNAME}
           password: ${GITHUB_PASSWORD}
