@@ -1,15 +1,13 @@
 jenkins:
   # Disable builds on master
   mode: EXCLUSIVE
-  location:
-    url: ${JENKINS_URL}
   systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin"
 
   # Configure crumb issuer
   crumbIssuer: standard
   # Enable agent -> master access control
   remotingSecurity:
-    enabled: false
+    enabled: true
 
   # Configure Docker cloud
   clouds:
@@ -49,6 +47,8 @@ jenkins:
   authorizationStrategy:
     roleStrategy:
       roles:
+        items: []
+        agents: []
         global:
           - name: "admin"
             description: "Jenkins administrators"
@@ -64,6 +64,47 @@ jenkins:
               - "Overall/Read"
             assignments:
               - "authenticated"
+
+
+# Disable CLI over Remoting
+security:
+  remotingCLI:
+    enabled: false
+
+credentials:
+  system:
+    domainCredentials:
+      - domain:
+          name: "Slack"
+          description: "Slack"
+          specifications:
+            - hostnameSpecification:
+                includes: "slack.com, *.slack.com"
+        credentials:
+          - string:
+              scope: GLOBAL
+              id: slack_token
+              secret: ${SLACK_TOKEN}
+      - domain:
+          name: "GitHub"
+          description: "Github"
+          specifications:
+            - hostnameSpecification:
+                includes: "github.com, *.github.com"
+        credentials:
+          - string:
+              scope: GLOBAL
+              id: github_access_token
+              secret: ${GITHUB_TOKEN}
+          - usernamePassword:
+              scope: GLOBAL
+              id: github_username_password
+              username: ${GITHUB_USERNAME}
+              password: ${GITHUB_PASSWORD}
+
+unclassified:
+  location:
+    url: ${JENKINS_URL}
 
   # Configure GitHub plugin
   githubpluginconfig:
@@ -83,35 +124,4 @@ jenkins:
   # Configure simple theme plugin
   simplethemedecorator:
     cssUrl: https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css
-
-# Disable CLI over Remoting
-security:
-  remotingCLI:
-    enabled: false
-
-credentials:
-  system:
-    ? name: "Slack"
-      description: "Slack"
-      specifications:
-        - hostnameSpecification:
-            includes: "slack.com, *.slack.com"
-    : - string:
-          scope: GLOBAL
-          id: slack_token
-          secret: ${SLACK_TOKEN}
-    ? name: "GitHub"
-      description: "Github"
-      specifications:
-        - hostnameSpecification:
-            includes: "github.com,*.github.com"
-    : - string:
-          scope: GLOBAL
-          id: github_access_token
-          secret: ${GITHUB_TOKEN}
-      - usernamePassword:
-          scope: GLOBAL
-          id: github_username_password
-          username: ${GITHUB_USERNAME}
-          password: ${GITHUB_PASSWORD}
 
