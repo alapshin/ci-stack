@@ -1,7 +1,6 @@
 jenkins:
   # Disable builds on master
   mode: EXCLUSIVE
-  systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin"
 
   # Configure crumb issuer
   crumbIssuer: standard
