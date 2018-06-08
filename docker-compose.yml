@@ -32,6 +32,9 @@ services:
     container_name: jenkins
     hostname: jenkins
     environment:
+      JAVA_OPTS: > 
+        -Dhudson.model.DirectoryBrowserSupport.CSP="sandbox allow-same-origin; 
+        default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';"
       DOCKER_GROUP: docker
       DOCKER_SOCKET: /var/run/docker.sock
       JENKINS_USER: jenkins
