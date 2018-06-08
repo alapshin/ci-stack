@@ -122,5 +122,4 @@ unclassified:
 
   # Configure simple theme plugin
   simplethemedecorator:
-    cssUrl: https://jenkins-contrib-themes.github.io/jenkins-neo-theme/dist/neo-light.css
-
+    cssUrl: https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css
