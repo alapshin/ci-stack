@@ -32,6 +32,9 @@ services:
     container_name: jenkins
     hostname: jenkins
     environment:
+      # Configure content security policy to fix local reports published
+      # with HTML Publisher plugin.
+      # See https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy
       JAVA_OPTS: > 
         -Dhudson.model.DirectoryBrowserSupport.CSP="sandbox allow-same-origin; 
         default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';"
