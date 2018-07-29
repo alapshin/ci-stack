@@ -41,6 +41,8 @@ services:
       JENKINS_URL: "https://${JENKINS_HOST}"
       SONARQUBE_URL: "https://${SONARQUBE_HOST}"
       CASC_JENKINS_CONFIG: /var/jenkins_home/jenkins.yml
+      # Upgrade installed plugins if image contains newer version
+      TRY_UPGRADE_IF_NO_MARKER: 'true'
     expose:
       - "8080"
     labels:
