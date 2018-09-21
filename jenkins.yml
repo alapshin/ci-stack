@@ -119,5 +119,7 @@ unclassified:
         serverAuthenticationToken: ${SONARQUBE_TOKEN}
 
   # Configure simple theme plugin
-  simplethemedecorator:
-    cssUrl: https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css
+  simple-theme-plugin:
+    elements:
+      - cssUrl:
+          url: "https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css"
