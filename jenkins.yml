@@ -63,11 +63,6 @@ jenkins:
               - "authenticated"
 
 
-# Disable CLI over Remoting
-security:
-  remotingCLI:
-    enabled: false
-
 credentials:
   system:
     domainCredentials:
