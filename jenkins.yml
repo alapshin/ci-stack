@@ -1,31 +1,9 @@
 jenkins:
-  # Disable builds on master
-  mode: EXCLUSIVE
-
   # Configure crumb issuer
   crumbIssuer: standard
   # Enable agent -> master access control
   remotingSecurity:
     enabled: true
-
-  # Configure Docker cloud
-  clouds:
-    - docker:
-        name: "docker"
-        dockerApi:
-          dockerHost:
-            uri: "unix:///var/run/docker.sock"
-        templates:
-          - labelString: "android-agent"
-            mode: EXCLUSIVE
-            connector:
-              attach:
-                user: "jenkins"
-            remoteFs: "/home/jenkins"
-            instanceCapStr: "1"
-            dockerTemplateBase:
-              image: "alapshin/jenkins-android-agent:3.29.1-1"
-              volumesString: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins\njenkins_agent_workdir:/home/jenkins/agent"
 
   # Configure agent protocols
   agentProtocols:
