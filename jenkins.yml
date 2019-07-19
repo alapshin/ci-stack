@@ -24,7 +24,7 @@ jenkins:
             remoteFs: "/home/jenkins"
             instanceCapStr: "1"
             dockerTemplateBase:
-              image: "alapshin/jenkins-android-agent:3.27.1-3"
+              image: "alapshin/jenkins-android-agent:3.29.1-1"
               volumesString: "android_sdk:/opt/android-sdk\njenkins_agent_home:/home/jenkins\njenkins_agent_cache:/home/jenkins/.jenkins\njenkins_agent_workdir:/home/jenkins/agent"
 
   # Configure agent protocols
