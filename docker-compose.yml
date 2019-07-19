@@ -73,6 +73,7 @@ services:
         target: SONARQUBE_TOKEN
     volumes:
       - "jenkins_home:/var/jenkins_home"
+      - "/usr/bin/docker:/usr/bin/docker"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${WORKDIR}/jenkins.yml:/var/jenkins_home/jenkins.yml"
 
