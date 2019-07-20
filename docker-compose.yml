@@ -13,6 +13,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - "traefik_tmp:/tmp"
       - "${WORKDIR}/acme.json:/acme.json"
       - "${WORKDIR}/traefik.toml:/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -100,6 +101,7 @@ services:
       - sonarqube_bundled_plugins:/opt/sonarqube/lib/bundled-plugins
 
 volumes:
+  traefik_tmp:
   jenkins_home:
   postgres_data:
   sonarqube_conf:
