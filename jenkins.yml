@@ -84,13 +84,6 @@ unclassified:
         manageHooks: true
         credentialsId: github_access_token
 
-  # Configure SonarQube plugin
-  sonarglobalconfiguration:
-    installations:
-      - name: SonarQube
-        serverUrl: ${SONARQUBE_URL}
-        serverAuthenticationToken: ${SONARQUBE_TOKEN}
-
   # Configure simple theme plugin
   simple-theme-plugin:
     elements:
