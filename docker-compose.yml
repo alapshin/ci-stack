@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   traefik:
-    image: traefik:1.7.11
+    image: traefik:1.7.19
     restart: always
     hostname: traefik
     container_name: traefik
