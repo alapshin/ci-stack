@@ -44,6 +44,11 @@ jenkins:
 credentials:
   system:
     domainCredentials:
+      - credentials:
+        - string:
+            scope: GLOBAL
+            id: openssl_password
+            secret: ${OPENSSL_PASSWORD}
       - domain:
           name: "Slack"
           description: "Slack"

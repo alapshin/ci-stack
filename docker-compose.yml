@@ -71,6 +71,9 @@ services:
       - source: github_password
         target: GITHUB_PASSWORD
 
+      - source: openssl_password
+        target: OPENSSL_PASSWORD
+
       - source: sonarqube_token
         target: SONARQUBE_TOKEN
     volumes:
@@ -121,5 +124,7 @@ secrets:
     file: "${WORKDIR}/secrets/github_username"
   github_password:
     file: "${WORKDIR}/secrets/github_password"
+  openssl_password:
+    file: "${WORKDIR}/secrets/openssl_password"
   sonarqube_token:
     file: "${WORKDIR}/secrets/sonarqube_token"
