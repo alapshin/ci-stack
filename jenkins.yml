@@ -34,6 +34,8 @@ jenkins:
           - name: "authenticated"
             description: "Authenticated users"
             permissions:
+              - "Job/Build"
+              - "Job/Cancel"
               - "Job/Read"
               - "Job/Discover"
               - "Overall/Read"
