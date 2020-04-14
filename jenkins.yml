@@ -52,17 +52,6 @@ credentials:
             id: openssl_password
             secret: ${OPENSSL_PASSWORD}
       - domain:
-          name: "Slack"
-          description: "Slack"
-          specifications:
-            - hostnameSpecification:
-                includes: "slack.com, *.slack.com"
-        credentials:
-          - string:
-              scope: GLOBAL
-              id: slack_token
-              secret: ${SLACK_TOKEN}
-      - domain:
           name: "GitHub"
           description: "Github"
           specifications:
