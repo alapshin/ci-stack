@@ -28,7 +28,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   jenkins:
-    image: alapshin/jenkins-master:2.263.4-1
+    image: alapshin/jenkins-master:2.277.1-1
     restart: always
     container_name: jenkins
     hostname: jenkins
@@ -47,7 +47,7 @@ services:
       CASC_JENKINS_CONFIG: /var/jenkins_home/jenkins.yml
       # Upgrade installed plugins if image contains newer version
       PLUGINS_FORCE_UPGRADE: "true"
-      TRY_UPGRADE_IF_NO_MARKER: 'true'
+      TRY_UPGRADE_IF_NO_MARKER: "true"
     expose:
       - "8080"
     labels:
