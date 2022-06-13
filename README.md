@@ -7,48 +7,35 @@ Service provides
 2. [Preconfigured SonarQube instance][sonarqube]
 3. Reverse proxy for Jenkins and SonarQube with Let's Encrypt support using [Traefik][traefik]
 
-## Deployment
-To deploy using [docker-machine][docker-machine]
+## Prerequisites
 
-1. Create docker-machine config using preferred cloud provider.
-For example, to use existing server with ssh connection execute
+Machine with installed docker >= 19.03 and ssh connection to said machine
+
+## Deployment
+To deploy using docker [context][docker-context]
+
+1. Create remote docker context
 ```
-docker-machine create \
-    --driver generic \
-    --generic-ip-address=xx.xx.xx.xx \
-    --generic-ssh-key ~/.ssh/id_rsa \
-    --generic-ssh-user=ubuntu \
-    ciserver
+docker context create ciserver --docker "host=ssh://user@example.com"
 ```
 
 2. Copy configuration and secrets to remote machine
 ```
-docker-machine scp jenkins.yml ubuntu@ciserver:/home/ubuntu
-docker-machine scp acme.json ubuntu@ciserver:/home/ubuntu
-docker-machine scp traefik.toml ubuntu@ciserver:/home/ubuntu
-docker-machine scp --recursive secrets ubuntu@ciserver:/home/ubuntu
+scp jenkins.yml user@example.com:/home/user
+scp acme.json user@example.com:/home/user
+scp traefik.toml user@example.com:/home/user
+scp --recursive secrets ubuntu@example.com:/home/user
 ```
 
-3. Setup environment variables to connect to remote Docker daemon
-
+3. Launch service on remote server using [docker-compose][docker-compose]
 ```
-eval $(docker-machine env ciserver)
-```
-
-4. Launch service on remote machine using [docker-compose][docker-compose]
-```
-docker-compose pull
-WORKDIR=/home/ubuntu JENKINS_HOST=jenkins.example.com SONARQUBE_HOST=sonarqube.example.com docker-compose up
-```
-
-5. Reset environment varibles
-```
-eval $(docker-machine env --unset)
+docker-compose --context ciserver pull
+docker-compose --context ciserver up
 ```
 
 
 [traefik]: https://github.com/containous/traefik
 [jenkins]: https://github.com/alapshin/jenkins-master
 [sonarqube]: https://github.com/alapshin/docker-sonarqube
-[docker-machine]: https://docs.docker.com/machine/
 [docker-compose]: https://docs.docker.com/compose/
+[docker-context]: https://docs.docker.com/engine/context/working-with-contexts/
