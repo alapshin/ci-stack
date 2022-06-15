@@ -28,7 +28,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   jenkins:
-    image: alapshin/jenkins-master:2.332.3-1
+    image: alapshin/jenkins-master:2.332.3-4
     restart: always
     container_name: jenkins
     hostname: jenkins
